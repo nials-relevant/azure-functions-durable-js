@@ -1,13 +1,18 @@
 import { FunctionOptions, FunctionTrigger, InvocationContext } from "@azure/functions";
-import { TokenSource } from ".";
+import { Task, TokenSource } from ".";
 import { DurableOrchestrationContext } from "../classes";
 
 /**
  * Type of a Generator that can be registered as an orchestration
+ * @param T the return value of the orchestration
  */
-export type OrchestrationHandler = (
+export type OrchestrationHandler<T = any> = (
     context: OrchestrationContext
-) => Generator<unknown, unknown, any>;
+) => Generator<
+    Task, // orchestrations yield Task types
+    T, // return type of the orchestration
+    any // what the SDK passes back to the orchestration
+>;
 
 /**
  * Context object passed to orchestration Functions.
